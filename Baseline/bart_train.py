@@ -7,7 +7,7 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES']="6,7"
 
 model_checkpoint = "facebook/bart-large"
-metric = load_metric("rouge.py")
+metric = load_metric("/content/dialogsum/Baseline/rouge.py")
 
 TEST_SUMMARY_ID = 1
 
@@ -40,7 +40,7 @@ def transform_dialogsumm_to_huggingface_dataset(train,validation,test):
     test = transform_test_file(test)
     return DatasetDict({"train":train,"validation":validation,"test":test})
 
-raw_datasets = transform_dialogsumm_to_huggingface_dataset("../DialogSum_Data/dialogsum.train.jsonl","../DialogSum_Data/dialogsum.dev.jsonl","../DialogSum_Data/dialogsum.test.jsonl")
+raw_datasets = transform_dialogsumm_to_huggingface_dataset("/content/dialogsum/DialogSum_Data/dialogsum.train.jsonl","/content/dialogsum/DialogSum_Data/dialogsum.dev.jsonl","/content/dialogsum/DialogSum_Data/dialogsum.test.jsonl")
 
 
 model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
@@ -144,7 +144,7 @@ decoded_labels = [" ".join(nltk.sent_tokenize(label.strip())) for label in decod
 
 
 # output summaries on test set
-with open("test_output.txt","w") as f: 
+with open("/content/dialogsum/Baseline/test_output.txt","w") as f: 
     for i in decoded_preds:
         print(i)
         f.write(i.replace("\n","")+"\n")
